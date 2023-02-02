@@ -1,15 +1,40 @@
-name: checking if ansible syantx is correct
+name: Testing the webapp
+
 on:
   pull_request:
-    branches:
-      - main
-   
+      branches:
+        - main
+
 jobs:
-  build:
-     runs-on: ubuntu-latest
-     
-     steps:
-        - uses: actions/checkout@v2
-        
-        - name: Run ansible-lint
-          uses: ansible-community/ansible-lint-action@main
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: 14
+
+    - name: Install dependencies
+      working-directory: ./servers
+      run: |
+        echo " Installing the dependencies on to the workspace"
+        npm install express mysql2 bcrypt jsonwebtoken body-parser jest supertest
+        npm i --save express-validator
+    
+    - name: Test cases
+      working-directory: ./servers
+      run: |
+        echo "Running the test cases for the application"
+        pwd
+        ls -lrt
+        npm test healthcheck.test.js
+      
+
+    
+
+   
+

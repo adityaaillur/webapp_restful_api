@@ -24,8 +24,8 @@ const postMethod = (req, res) => {
       //insert data into the mysql database
       connection.query("INSERT INTO user (email, first_name, last_name, password) values (?,?,?,?)", [email, first_name, last_name, hash], function (error, results, fields) {
         if (error) {
-          return res.status(500).json({
-            error: error
+          return res.status(400).json({
+            message: 'User already exists!'
           });
         }
         res.status(201).json({

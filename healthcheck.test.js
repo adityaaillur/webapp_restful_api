@@ -12,6 +12,6 @@ describe('Health Check', () => {
 
   it('should return 200 OK', async () => {
     const res = await request(app).get('/healthz');
-    expect(res.statusCode).toBe(400);
+    expect(res.statusCode).toBe(200);
   });
 });

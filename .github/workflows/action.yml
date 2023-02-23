@@ -1,0 +1,28 @@
+name: test
+
+on: 
+  push:
+      branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Building the Artifacts
+        run: zip -r release.zip .
+         
+      - name: Validate AMI template
+        run: packer validate ./aws-ami.pkr.hcl
+
+      - name: Packer Build
+        uses: ExitoLab/packer_build_action_aws@v0.2.10
+        with:
+          templateFile: 'aws-ami.pkr.hcl'
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          
+        

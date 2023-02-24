@@ -1,4 +1,4 @@
-name: test
+name: packer-hcl
 
 on: 
   pull_request:

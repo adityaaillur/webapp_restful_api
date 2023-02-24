@@ -1,6 +1,6 @@
 # 🚀 Node.js REST API with Express.js
 
-A robust and secure REST API built with Node.js and the Express.js framework, providing user management functionalities such as registration, retrieval, update, and deletion.
+A robust and secure REST API built with Node.js and the Express.js framework, providing user management functionalities such as registration, retrieval, update, and deletion. Integrated Packer.
 
 ## 🔒 Secure Password Storage
 The API ensures that user passwords are stored securely by validating inputs using the `express-validator` library and hashing the password using `bcrypt` before saving it in the MySQL database.

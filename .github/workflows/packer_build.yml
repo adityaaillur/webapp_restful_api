@@ -11,18 +11,58 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
 jobs:
-  build:
-    name: packer build
+  packer_validate:
+    name: packer validate
     runs-on: ubuntu-latest
-
     if: github.event.pull_request.merged == true
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install Packer
+        run: sudo apt-get update && sudo apt-get install -y packer
+      - name: Check Packer file format
+        run: |
+          if ! packer fmt -check packer; then
+            echo "Packer format is not correct. Please run 'packer fmt' to fix the issue."
+            exit 1
+          fi
+      - name: Check Packer file valid
+        run: |
+          packer init packer
+          if ! packer validate packer; then
+            echo "Packer files are not valid."
+            exit 1
+          fi
 
-    - name: Checkout code
-      uses: actions/checkout@v2
-    - name: Install Packer
-      run: sudo apt-get update && sudo apt-get install -y packer
-    - name: Initialize packer
-      run: packer init packer
-    - name: Build Packer image
-      run: packer build packer/aws-ami.pkr.hcl
+  test_cases:
+    name: test
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+      - name: Install dependencies
+        run: |
+          npm install express mysql2 bcrypt body-parser jest supertest express-validator
+      - name: Test cases
+        run: |
+          npm test healthcheck.test.js
+
+  packer_build:
+    name: packer build
+    runs-on: ubuntu-latest
+    needs: [packer_validate, test_cases]
+    if: github.event.pull_request.merged == true
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install Packer
+        run: sudo apt-get update && sudo apt-get install -y packer
+      - name: Initialize packer
+        run: packer init packer
+      - name: Build Packer image
+        run: packer build packer/aws-ami.pkr.hcl

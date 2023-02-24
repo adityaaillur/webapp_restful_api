@@ -1,0 +1,33 @@
+name: packer-hcl
+
+on:
+  pull_request:
+    branches:
+      - main
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+jobs:
+  build:
+    name: packer validate
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Install Packer
+      run: sudo apt-get update && sudo apt-get install -y packer
+    - name: Check Packer file format
+      run: |
+        if ! packer fmt -check packer; then
+          echo "Packer format is not correct. Please run 'packer fmt' to fix the issue."
+          exit 1
+        fi
+    - name: Check Packer file valid
+      run: |
+        packer init packer
+        if ! packer validate packer; then
+          echo "Packer files are not valid."
+          exit 1
+        fi

@@ -66,8 +66,8 @@ source "amazon-ebs" "webapp-ami" {
   vpc_id = "${var.vpc_id}"
 
   launch_block_device_mappings {
-    device_name = "/dev/xvda"
-    volume_size = 8
+    device_name           = "/dev/xvda"
+    volume_size           = 8
     delete_on_termination = true
   }
 }
@@ -78,11 +78,11 @@ build {
   ]
 
   provisioner "file" {
-    source      = "../../webapp"
+    source      = "../webapp"
     destination = "/home/ec2-user/webapp"
   }
 
   provisioner "shell" {
-    script      = "provision.sh"
+    script = "packer/provision.sh"
   }
 }

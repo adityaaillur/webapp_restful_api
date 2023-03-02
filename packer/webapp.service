@@ -1,11 +1,11 @@
 [Unit]
-Description= My webpp
+Description=My Node.js App
 After=network.target
 
 [Service]
 Type=simple
 User=ec2-user
-WorkingDirectory=/home/ec2-user/webapp  
+WorkingDirectory=/home/ec2-user/webapp
 ExecStart=/home/ec2-user/webapp npm start
 Restart=on-failure
 

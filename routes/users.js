@@ -16,5 +16,4 @@ router.post("/user/", PostAllUsers);
 //INSERT
 router.put("/user/:userId", checkAuth, PutAllUsers);
 
-
 module.exports = router;

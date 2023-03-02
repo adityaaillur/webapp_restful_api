@@ -1,36 +1,57 @@
-# 🚀 Node.js REST API with Express.js
+# webapp
 
-A robust and secure REST API built with Node.js and the Express.js framework, providing user management functionalities such as registration, retrieval, update, and deletion. Integrated Packer.
+Cloud REST API
+A simple user management system built using Node.js, Express, and MySQL.
 
-## 🔒 Secure Password Storage
-The API ensures that user passwords are stored securely by validating inputs using the `express-validator` library and hashing the password using `bcrypt` before saving it in the MySQL database.
+Getting Started
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-## 💾 Database Connection
-The database connection is managed by the imported `connection` module and user information is stored in the `users` table.
+Prerequisites
+Node.js
+npm
+MySQL
+dotenv
+Installing
+Clone the repository:
 
-## 📚 Required Libraries
-The following libraries are used in the code and must be installed before running the API:
+bash
+Copy code 
+Install the dependencies:
 
-- `express`
-- `bcrypt`
-- `body-parser`
-- `express-validator`
-- `mysql2`
+sql
+Copy code
+cd user-management-system
+npm install
+Create a .env file in the root directory of the project and add the following environment variables:
 
-To install these libraries, run the following command in your terminal:
+css
+Copy code
+DB_HOST=[database host]
+DB_USER=[database user]
+DB_PASSWORD=[database password]
+DB_NAME=[database name]
+Replace the placeholders with your database credentials.
 
-npm install <library name>
+Running the app
+Start the application:
 
-## 🚀 Running the API
-To get started with the API, follow these steps:
+sql
+Copy code
+npm start
+The app should now be running at http://localhost:3000 or any port that is empty .
 
-1. Clone the repository to your local system.
-2. Open the Command Prompt or Terminal in your system.
-3. Navigate to the directory where the `app.js` file is located using the `cd` command.
-4. Type the following command to run the file:
+API Endpoints
+The following are the available API endpoints:
 
-And that's it! You're now ready to start using the REST API. Happy coding!
-
-
-Cloudddddddddd Test 3
-
+GET /users/get: Get a user by email.
+POST /users/create: Create a new user.
+PUT /users/insert: Update an existing user.
+Built With
+Node.js
+Express
+MySQL
+dotenv
+bcrypt
+fs
+Author
+Aditya Illur

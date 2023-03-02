@@ -80,14 +80,34 @@ const checkResponseForPostProduct =  (response) =>{
 
 }
 
+const checkResponseForPostProductImage =  (response) =>{
+
+    const knownKeys = ['name', 'description', 'sku', 'manufacturer',"quantity"];
+    let isValid = false;    
+
+    Object.keys(response).forEach(key => {
+          if (!knownKeys.includes(key)){
+            isValid = false;
+          }else{
+            isValid = true;
+          }  
+        });
+
+        return isValid;
+
+}
+
 const validateQuantity =  (quantity) =>{
 
-    if(quantity <= 0 || quantity > 100){
-        return false
+    if(isNaN(quantity)){
+        return false;
     }else{
-        return true
+        if(quantity <= 0 || quantity > 100){
+            return false
+        }else{
+            return true
+        }
     }
-
 }
 
 const validateQuantityPatch =  (quantity) =>{
@@ -95,10 +115,14 @@ const validateQuantityPatch =  (quantity) =>{
     if(quantity == null){
         return true
     }else{
-        if(quantity <= 0 || quantity > 100){
-            return false
+        if(isNaN(quantity)){
+            return false;
         }else{
-            return true
+            if(quantity <= 0 || quantity > 100){
+                return false
+            }else{
+                return true
+            }
         }
     }
 
@@ -118,6 +142,8 @@ const validateProduct = (name)=>{
     }
 
 }
+
+
 
 module.exports = {
     validateNumber,

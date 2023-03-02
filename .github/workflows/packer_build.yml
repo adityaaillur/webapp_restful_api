@@ -1,4 +1,4 @@
-name: build
+name: packer-hcl
 
 on:
   pull_request:

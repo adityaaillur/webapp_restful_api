@@ -1,4 +1,4 @@
-const {validateNumber,
+const {     validateNumber,
     validatePassword,
     validateEmail,
     validateFirstAndLastName,

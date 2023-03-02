@@ -61,6 +61,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         owner_user_id: {
             type: DataTypes.INTEGER,
+
         }   
     },{
         timestamps: false

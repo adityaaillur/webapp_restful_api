@@ -4,8 +4,8 @@ const {
     validateQuantity,
     validateNumber,
     validateQuantityPatch} = require('../validation/validation');
-const {Product} = require('../models')
-const {User} = require('../models')
+    const {Product,User,Images} = require('../models')
+    const {deleteFile} = require('../aws/s3')
 
 const PostAllProducts = async (req,res) => {
     const response = req.body;
@@ -81,16 +81,17 @@ const PostAllProducts = async (req,res) => {
                 }
                 
             }else{
-                res.status(400).send("Invalid quantity: Please enter a value between 1 and 100.");
+                res.status(400).send("Please give the Quantity of Product which nedds to more than 0 and less than 100");
             }
         }else{
-            res.status(400).send("Missing information: Please provide values for name, description, SKU, and manufacturer.");
+            res.status(400).send("Please give values to name,description,sku or manufacturer");
         }
     }else{
-        res.status(400).send("Unexpected key detected: Please remove the unintended key.");
+        res.status(400).send("UnIntened Key or No key  is being sent ");
     }
     
 };
+
 
 const GetAllProducts = async (req,res) => { 
     const productId = req.params.productId;
@@ -109,7 +110,7 @@ const GetAllProducts = async (req,res) => {
         });
 
         if(productFound == null ){
-            res.status(403).send("Invalid Product ID: Product not found.")
+            res.status(403).send("The ProductId doesn't exists")
         }else{
             res.status(200);
             res.send(productFound);
@@ -175,7 +176,7 @@ const PutAllProducts = async (req,res) => {
                         });
         
                         if(productFound == null){
-                            res.status(403).send("Product not found...");
+                            res.status(403).send("ProductId doesn't exists");
                         }else{
 
                             const productSku = await Product.findOne({
@@ -187,7 +188,7 @@ const PutAllProducts = async (req,res) => {
                             });
 
                             if(productSku != null && productFound.sku != productSku.sku){
-                                res.status(400).send("SKU already exists: Unique SKU required.");
+                                res.status(400).send("SKU needs to be unique");
                             }else{
                                 Product.update({
                                     name:name,
@@ -199,7 +200,7 @@ const PutAllProducts = async (req,res) => {
                                     where: { id: productId }
                                   },
                                   { merge: true }).then(() => {
-                                    res.status(200).send("Product account update successful.");
+                                    res.status(200).send("Product account updated successfully");
                                     console.log("//PUT"+ '\n' +  JSON.stringify(userFound) +  "is updated")
                                 }).catch((error) => {
                                 console.error("Error updating user: ", error);
@@ -209,11 +210,11 @@ const PutAllProducts = async (req,res) => {
                         }
                         
                     }else{
-                        res.status(400).send("Invalid quantity: Please enter a value between 1 and 100.");
+                        res.status(400).send("Please give the Quantity of Product which nedds to more than 0 and less than 100");
                     }
     
                 }else{
-                    res.status(400).send("Missing information: Please provide values for name, description, SKU, and manufacturer.");
+                    res.status(400).send("Please give values to name,description,sku or manufacturer");
                 }
         
             }else{
@@ -221,7 +222,7 @@ const PutAllProducts = async (req,res) => {
             }
 
         }else{
-            res.status(400).send("Unexpected key detected: Please remove the unintended key.");
+            res.status(400).send("UnIntened Key is being sent ");
         }
     }
     else{
@@ -300,7 +301,7 @@ const PatchAllProducts = async (req,res) => {
                                     where: { id: productId }
                                   },
                                   { merge: true }).then(() => {
-                                    res.status(200).send("Product account update successful.");
+                                    res.status(200).send("Product account updated successfully");
                                     console.log("//PATCH"+ '\n' +  JSON.stringify(userFound) +  "is updated")
                                 }).catch((error) => {
                                 console.error("Error updating user: ", error);
@@ -310,7 +311,7 @@ const PatchAllProducts = async (req,res) => {
                         }
                         
                     }else{
-                        res.status(400).send("Invalid quantity: Please enter a value between 1 and 100.");
+                        res.status(400).send("Please give the Quantity of Product which nedds to more than 0 and less than 100");
                     }
            
             }else{
@@ -318,7 +319,7 @@ const PatchAllProducts = async (req,res) => {
             }
 
         }else{
-            res.status(400).send("Unexpected key detected: Please remove the unintended key.");
+            res.status(400).send("UnIntened Key is being sent ");
         }
     }
     else{
@@ -334,7 +335,38 @@ const DeleteAllProducts = async (req,res) => {
 
     if(idError){
 
-       const productFound =  await Product.destroy({
+        const productFoundOne = await Product.findOne({
+            where: { id: productId},
+        }).catch((err) => {
+            if(err){
+                console.log(err);
+            }
+        });
+       if(productFoundOne != null){
+        const imagesFound = await Images.findAll({
+            where: { product_id: productId },
+
+        }).catch((err) => {
+            if(err){
+                console.log(err);
+            }
+        });
+        
+        console.log(imagesFound);
+        if(imagesFound != null ){
+            console.log("Got Here")
+            await Images.destroy({
+                where: { product_id: productId },
+            }).catch((err) => {
+                if(err){
+                    console.log(err);
+                }
+            });
+        }   
+        for (const image of imagesFound) {
+            await deleteFile(image.file_name);
+        }
+        const productFound =  await Product.destroy({
             where: { id: productId },
         }).catch((err) => {
             if(err){
@@ -344,7 +376,7 @@ const DeleteAllProducts = async (req,res) => {
 
         res.status(200).send("Product is Deleted")
         console.log("//Delete"+ '\n' +  JSON.stringify(productFound) +  "is deleted")
-
+    }
 
     }else{
         res.status(404).send(error);

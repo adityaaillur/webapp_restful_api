@@ -8,10 +8,10 @@ const auth = async (req, res, next) => {
     if (req.method === 'PUT' || req.method === 'GET') {
 
         if(!req.get('Authorization')){
-            var err = new Error('Unable to Authenticate!')
+            var err = new Error('Not Authenticated!')
             // Set status code to '401 Unauthorized' and 'WWW-Authenticate' header to 'Basic'
             res.status(401).set('WWW-Authenticate', 'Basic')
-            res.send("Provide Basic Auth, Username, Password")
+            res.send("Please give Basic Auth with username and password")
             next(err)
         }
         // If 'Authorization' header present
@@ -33,7 +33,6 @@ const auth = async (req, res, next) => {
 
             if(UsernameErr && PasswordErr) {
 
-
                 var userFound = await User.findOne({
                     where: { username: username },
                 }).catch((err) => {
@@ -43,10 +42,10 @@ const auth = async (req, res, next) => {
                 });
 
                 if(userFound == null){
-                    var err = new Error('Unable to Authenticate!')
+                    var err = new Error('Not Authenticated!')
                     // Set status code to '401 Unauthorized' and 'WWW-Authenticate' header to 'Basic'
                     res.status(401).set('WWW-Authenticate', 'Basic')
-                    res.send("Username not Found")
+                    res.send("The username doesn't exists")
                     next(err)
                 }else{
                     if(userid == userFound.id){
@@ -57,31 +56,31 @@ const auth = async (req, res, next) => {
                                     next()
                                     console.log("Authenticated")
                                 } else {
-                                    var err = new Error('Unable to Authenticate!')
+                                    var err = new Error('Not Authenticated!')
                                     // Set status code to '401 Unauthorized' and 'WWW-Authenticate' header to 'Basic'
                                     res.status(401).set('WWW-Authenticate', 'Basic')
-                                    res.send("Invalid Auth Password")
+                                    res.send("The password is wrong in Authorization")
                                     next(err)
                                 }
                             });
                         }else{
-                            var err = new Error('Unable to Authenticate!')
+                            var err = new Error('Not Authenticated!')
                             // Set status code to '401 Unauthorized' and 'WWW-Authenticate' header to 'Basic'
                             res.status(401).set('WWW-Authenticate', 'Basic')
-                            res.send("Invalid Auth Username")
+                            res.send("The username is wrong in Authorization")
                             next(err)
                         }
                     } else{
-                        var err = new Error('Unable to Authenticate!')
+                        var err = new Error('Not Authenticated!')
                         // Set status code to '401 Unauthorized' and 'WWW-Authenticate' header to 'Basic'
                         res.status(403)
-                        res.send("Invalid UserID")
+                        res.send("The userid is wrong in the parameter")
                         next(err)
                     }                          
                 }
                 
             }else{
-                res.status(401).send("Invalid Auth Email/Password");
+                res.status(401).send("Invalid email or password in Authorization");
             }
         }
     }else {

@@ -1,5 +1,3 @@
-
-
 variable "ami_users" {
   type    = list(string)
   default = ["393640817367", "032083062214"]

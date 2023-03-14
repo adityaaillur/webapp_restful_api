@@ -38,7 +38,7 @@ Start the application:
 sql
 Copy code
 npm start
-The app should now be running at http://localhost:3000 or any port that is empty .
+The app should now be running at http://localhost:8000 or any port that is empty .
 
 API Endpoints
 The following are the available API endpoints:

@@ -76,11 +76,11 @@ build {
   ]
 
   provisioner "file" {
-    source      = "../../webapp"
+    source      = "../webapp"
     destination = "/home/ec2-user/webapp"
   }
 
   provisioner "shell" {
-    script = "provision.sh"
+    script = "packer/provision.sh"
   }
 }

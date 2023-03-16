@@ -25,12 +25,12 @@ variable "ssh_username" {
 
 variable "subnet_id" {
   type    = string
-  default = "subnet-0f727e649d00bbd50"
+  default = "subnet-0442b48d81b299aa0"
 }
 
 variable "vpc_id" {
   type    = string
-  default = "vpc-090ce57d9d9cc8da6"
+  default = "vpc-0f9df930d99d2b542"
 }
 
 variable "ami_name" {

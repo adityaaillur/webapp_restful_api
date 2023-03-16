@@ -25,12 +25,12 @@ variable "ssh_username" {
 
 variable "subnet_id" {
   type    = string
-  default = "subnet-00e04e49daa53614b"
+  default = "subnet-0f727e649d00bbd50"
 }
 
 variable "vpc_id" {
   type    = string
-  default = "vpc-09884c889b69ff67c"
+  default = "vpc-090ce57d9d9cc8da6"
 }
 
 variable "ami_name" {
@@ -40,12 +40,12 @@ variable "ami_name" {
 
 variable "environment" {
   type    = string
-  default = "demo"
+  default = "dev"
 }
 
 variable "aws_profile" {
   type    = string
-  default = "demo"
+  default = "dev"
 }
 
 source "amazon-ebs" "webapp-ami" {

@@ -30,4 +30,3 @@ To get started with the API, follow these steps:
 4. Type the following command to run the file:
 
 And that's it! You're now ready to start using the REST API. Happy coding!
-

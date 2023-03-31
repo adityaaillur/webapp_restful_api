@@ -62,11 +62,6 @@ sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
 
 # passwords=$(sudo grep 'temporary password' /var/log/mysqld.log | awk {'print $13'})
 
-# mysql -u root -p$passwords --connect-expired-password -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'Abhi@123';"
-
-# mysql -u root -pAbhi@123 -e "create database menagerie;"
-
-
 # cmd to install node verson 16
 sudo yum install -y curl
 curl -sL https://rpm.nodesource.com/setup_16.x | sudo -E bash -

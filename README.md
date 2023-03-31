@@ -1,15 +1,32 @@
-This is a guide on how to install and run a simple user management system web application built using Node.js, Express, and MySQL.
-To get started, you need to have Node.js, npm, MySQL, and dotenv installed. 
-Once you have cloned the repository, you should install the dependencies by running 'npm install' command in the 'user-management-system' directory.
+# 🚀 Node.js REST API with Express.js
 
-After that, you should create a .env file in the root directory of the project and add the necessary environment variables for the database credentials, 
-including DB_HOST, DB_USER, DB_PASSWORD, and DB_NAME. Replace the placeholders with your database credentials.
+A robust and secure REST API built with Node.js and the Express.js framework, providing user management functionalities such as registration, retrieval, update, and deletion. Integrated Packer.
 
-To run the application, you should start it by running the 'npm start' command in the 'user-management-system' directory.
-The application should now be running on http://localhost:8000 or any other empty port.
+## 🔒 Secure Password Storage
+The API ensures that user passwords are stored securely by validating inputs using the `express-validator` library and hashing the password using `bcrypt` before saving it in the MySQL database.
 
-The application provides three API endpoints for managing user data, including GET /users/get to retrieve a user by email, POST /users/create to create a new user, and PUT /users/insert to update an existing user. These endpoints can be accessed via HTTP requests and can be used to perform CRUD (Create, Read, Update, Delete) operations on user data.
+## 💾 Database Connection
+The database connection is managed by the imported `connection` module and user information is stored in the `users` table.
 
-Changes for demo updated
+## 📚 Required Libraries
+The following libraries are used in the code and must be installed before running the API:
 
+- `express`
+- `bcrypt`
+- `body-parser`
+- `express-validator`
+- `mysql2`
 
+To install these libraries, run the following command in your terminal:
+
+npm install <library name>
+
+## 🚀 Running the API
+To get started with the API, follow these steps:
+
+1. Clone the repository to your local system.
+2. Open the Command Prompt or Terminal in your system.
+3. Navigate to the directory where the `app.js` file is located using the `cd` command.
+4. Type the following command to run the file:
+
+And that's it! You're now ready to start using the REST API. Happy coding!

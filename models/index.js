@@ -35,9 +35,9 @@ const  sequelize = new Sequelize(
     try {
       await sequelize.authenticate();
       console.log('Connection has been established successfully.');
-      logger.customerLogger.info('Connection to the Database has been established successfully.')
+      logger.customlogger.info('Connection to the Database has been established successfully.')
     } catch (error) {
-      logger.customerLogger.info('Unable to connect to the database')
+      logger.customlogger.info('Unable to connect to the database')
       console.error('Unable to connect to the database:', error);
     }
   } 

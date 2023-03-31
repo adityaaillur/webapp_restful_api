@@ -1,8 +1,8 @@
-const logger = require('./logger/logger')
+const { client } = require('./aws/cloud-watch')
 
 const health = (app) => app.get('/healthz', (req, res) => {
+  client.increment('health_check');
   res.status(200).send("OK");
-  logger.customerLogger.info('Access of API healthz')
 });
 
 module.exports = health;

@@ -10,15 +10,15 @@ const apiCallCounter = require("../aws/cloud-watch")
 //Routes for Adding the images
 
 //POST
-router.post("/product/:productId/image",apiCallCounter, productAuth, PostAllProductImages);
+router.post("/product/:productId/image",productAuth, PostAllProductImages);
 
 //GET
-router.get("/product/:productId/image/:imageId",apiCallCounter, productAuth, GetImage);
+router.get("/product/:productId/image/:imageId", productAuth, GetImage);
 
 //GETALL
-router.get("/product/:productId/image",apiCallCounter, productAuth, GetAllImages);
+router.get("/product/:productId/image", productAuth, GetAllImages);
 
 //DELETE
-router.delete("/product/:productId/image/:imageId",apiCallCounter, productAuth, DeleteAllImages);
+router.delete("/product/:productId/image/:imageId",productAuth, DeleteAllImages);
 
 module.exports = router;

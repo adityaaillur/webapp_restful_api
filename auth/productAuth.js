@@ -13,7 +13,7 @@ const auth = async (req, res, next) => {
             // Set status code to '401 Unauthorized' and 'WWW-Authenticate' header to 'Basic'
             res.status(401).set('WWW-Authenticate', 'Basic')
             res.send("Please give Basic Auth with username and password")
-            logger.customerLogger.error('Please give Basic Auth with username and password for product')
+            logger.customlogger.error('Please give Basic Auth with username and password for product')
             next(err)
         }
         // If 'Authorization' header present
@@ -64,7 +64,7 @@ const auth = async (req, res, next) => {
                     // Set status code to '401 Unauthorized' and 'WWW-Authenticate' header to 'Basic'
                     res.status(401).set('WWW-Authenticate', 'Basic')
                     res.send("The username doesn't exists")
-                    logger.customerLogger.error('The username does not exists')
+                    logger.customlogger.error('The username does not exists')
                     next(err)
                 }else{
                     if (req.method === 'POST' && isImage){
@@ -98,7 +98,7 @@ const auth = async (req, res, next) => {
                                 // Set status code to '401 Unauthorized' and 'WWW-Authenticate' header to 'Basic'
                                 res.status(404).set('WWW-Authenticate', 'Basic')
                                 res.send("The product doesn't exists")
-                                logger.customerLogger.error('The product does not exists')
+                                logger.customlogger.error('The product does not exists')
                                 next(err)
                             }else{
                                 if(productFound.owner_user_id == userFound.id){
@@ -118,33 +118,33 @@ const auth = async (req, res, next) => {
                                                 // Set status code to '401 Unauthorized' and 'WWW-Authenticate' header to 'Basic'
                                                 res.status(404).set('WWW-Authenticate', 'Basic')
                                                 res.send("The image doesn't exists")
-                                                logger.customerLogger.error('The image does not exists')
+                                                logger.customlogger.error('The image does not exists')
                                                 next(err)
                                             }else{
                                                 validateUsernameAndPassword(username,password,userFound,next,res);
                                             } 
                                         }else{
                                             res.status(403).send("The image Id is Invalid")
-                                            logger.customerLogger.error('The image Id is Invalid')
+                                            logger.customlogger.error('The image Id is Invalid')
                                         }
                                     }
                                 }else{
                                     res.status(403).set('WWW-Authenticate', 'Basic')
                                     res.send("The product is not created by this user")
-                                    logger.customerLogger.error('The product is not created by this user')
+                                    logger.customlogger.error('The product is not created by this user')
                                 }
                             }
 
                         }
                         else{
                             res.status(403).send("The product Id is Invalid")
-                            logger.customerLogger.error('The product is not created by this user')
+                            logger.customlogger.error('The product is not created by this user')
                         }
                     }                                          
                 }               
             }else{
                 res.status(401).send("Invalid email or password in Authorization");
-                logger.customerLogger.error('The product is not created by this user')
+                logger.customlogger.error('The product is not created by this user')
             }
         }
     }else {
@@ -160,13 +160,13 @@ function validateUsernameAndPassword(username, password, userFound,next,res){
             if (result === true) {
                 next()
                 console.log("Authenticated")
-                logger.customerLogger.info('Valid User is Authenticated')
+                logger.customlogger.info('Valid User is Authenticated')
             } else {
                 var err = new Error('Not Authenticated!')
                 // Set status code to '401 Unauthorized' and 'WWW-Authenticate' header to 'Basic'
                 res.status(401).set('WWW-Authenticate', 'Basic')
                 res.send("The password is wrong in Authorization")
-                logger.customerLogger.error('The password is wrong in Authorization')
+                logger.customlogger.error('The password is wrong in Authorization')
             }
         });
     }else{
@@ -174,7 +174,7 @@ function validateUsernameAndPassword(username, password, userFound,next,res){
         // Set status code to '401 Unauthorized' and 'WWW-Authenticate' header to 'Basic'
         res.status(401).set('WWW-Authenticate', 'Basic')
         res.send("The username is wrong in Authorization")
-        logger.customerLogger.error('The username is wrong in Authorization')
+        logger.customlogger.error('The username is wrong in Authorization')
     } 
 }
 

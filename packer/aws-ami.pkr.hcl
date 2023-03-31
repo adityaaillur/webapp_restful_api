@@ -1,12 +1,3 @@
-# packer {
-#   required_plugins {
-#     docker = {
-#       version = ">= 0.0.7"
-#       source = "github.com/hashicorp/docker"
-#     }
-#   }
-# }
-
 variable "ami_users" {
   type    = list(string)
   default = ["393640817367", "032083062214"]

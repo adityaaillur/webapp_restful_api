@@ -6,19 +6,9 @@ const path = require('path');
 const Sequelize = require('sequelize');
 const process = require('process');
 const basename = path.basename(__filename);
+const logger = require('../logger/logger')
 
-// const env = process.env.NODE_ENV || 'development';
-// const config = require(__dirname + '/../config/config.js')[env];
 const db = {};
-
-// let sequelize;
-// if (config.development) {
-//   sequelize = new Sequelize(process.env[config.use_env_variable], config);
-// } else {
-//   sequelize = new Sequelize(config.database, config.username, config.password, config);
-// }
-
-// const Sequelize = require("sequelize");
 
 const sequelize = new Sequelize(
    process.env.DB_DATABASE,
@@ -33,7 +23,9 @@ const sequelize = new Sequelize(
   try {
     sequelize.authenticate();
     console.log('Connection has been established successfully.');
+    logger.customlogger.info('Connection to the Database has been established successfully.')
   } catch (error) {
+    logger.customlogger.info('Unable to connect to the database')
     console.error('Unable to connect to the database:', error);
   }
 

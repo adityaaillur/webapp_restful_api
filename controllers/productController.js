@@ -6,8 +6,8 @@ const {
     validateQuantityPatch} = require('../validation/validation');
     const {Product,User,Images} = require('../models')
     const {deleteFile} = require('../aws/s3')
-
-const PostAllProducts = async (req,res) => {
+    const logger = require('../logger/logger')
+    const PostAllProducts = async (req,res) => {
     const response = req.body;
     const name = req.body.name;
     const description = req.body.description;
@@ -54,6 +54,7 @@ const PostAllProducts = async (req,res) => {
 
                 if(productFound != null){
                     res.status(400).send("SKU needs to be unique");
+                    logger.customerLogger.error('error','Not an Unique SKU')
                 }else{
                     await Product.create({
                         name:name,
@@ -82,12 +83,14 @@ const PostAllProducts = async (req,res) => {
                 
             }else{
                 res.status(400).send("Please give the Quantity of Product which nedds to more than 0 and less than 100");
+                logger.customerLogger.error('error','Invalid Quantity!')
             }
         }else{
             res.status(400).send("Please give values to name,description,sku or manufacturer");
+            logger.customerLogger.error('error','Values Missing!')
         }
     }else{
-        res.status(400).send("UnIntened Key or No key  is being sent ");
+        res.status(400).send("Un-intended Key or No key  is being sent ");
     }
     
 };
@@ -111,6 +114,7 @@ const GetAllProducts = async (req,res) => {
 
         if(productFound == null ){
             res.status(403).send("The ProductId doesn't exists")
+            logger.customerLogger.log('error','Product Not Found!')
         }else{
             res.status(200);
             res.send(productFound);
@@ -177,6 +181,7 @@ const PutAllProducts = async (req,res) => {
         
                         if(productFound == null){
                             res.status(403).send("ProductId doesn't exists");
+                            logger.customerLogger.error('error','Product Not Found!')
                         }else{
 
                             const productSku = await Product.findOne({
@@ -189,6 +194,7 @@ const PutAllProducts = async (req,res) => {
 
                             if(productSku != null && productFound.sku != productSku.sku){
                                 res.status(400).send("SKU needs to be unique");
+                                logger.customerLogger.error('error','Unique SKU Required!')
                             }else{
                                 Product.update({
                                     name:name,
@@ -202,6 +208,7 @@ const PutAllProducts = async (req,res) => {
                                   { merge: true }).then(() => {
                                     res.status(200).send("Product account updated successfully");
                                     console.log("//PUT"+ '\n' +  JSON.stringify(userFound) +  "is updated")
+                                    logger.customlogger.info("Product account updated successfully")
                                 }).catch((error) => {
                                 console.error("Error updating user: ", error);
                                 }); 
@@ -210,11 +217,13 @@ const PutAllProducts = async (req,res) => {
                         }
                         
                     }else{
-                        res.status(400).send("Please give the Quantity of Product which nedds to more than 0 and less than 100");
+                        res.status(400).send("Please give the Quantity of Product which needs to more than 0 and less than 100");
+                        logger.customerLogger.error('error','Invalid Quantity!')
                     }
     
                 }else{
                     res.status(400).send("Please give values to name,description,sku or manufacturer");
+                    logger.customerLogger.error('error','Values Missing!')
                 }
         
             }else{
@@ -222,7 +231,7 @@ const PutAllProducts = async (req,res) => {
             }
 
         }else{
-            res.status(400).send("UnIntened Key is being sent ");
+            res.status(400).send("Un-intended Key is being sent ");
         }
     }
     else{
@@ -278,6 +287,7 @@ const PatchAllProducts = async (req,res) => {
         
                         if(productFound == null){
                             res.status(403).send("Product doesn't exists");
+                            logger.customerLogger.error('error','Product not Found!')
                         }else{
 
                             const productSku = await Product.findOne({
@@ -290,6 +300,7 @@ const PatchAllProducts = async (req,res) => {
 
                             if(productSku != null && productFound.sku != productSku.sku){
                                 res.status(400).send("SKU needs to be unique");
+                                logger.customerLogger.error('error','Unique SKU required!')
                             }else{
                                 Product.update({
                                     name: name,
@@ -302,7 +313,9 @@ const PatchAllProducts = async (req,res) => {
                                   },
                                   { merge: true }).then(() => {
                                     res.status(200).send("Product account updated successfully");
+                                    logger.customerLogger.error('error','Product Update Successful!')
                                     console.log("//PATCH"+ '\n' +  JSON.stringify(userFound) +  "is updated")
+                                    logger.customlogger.info("//PATCH"+ '\n' +  JSON.stringify(userFound) +  "is updated")
                                 }).catch((error) => {
                                 console.error("Error updating user: ", error);
                                 }); 
@@ -311,7 +324,8 @@ const PatchAllProducts = async (req,res) => {
                         }
                         
                     }else{
-                        res.status(400).send("Please give the Quantity of Product which nedds to more than 0 and less than 100");
+                        res.status(400).send("Please give the Quantity of Product which needs to more than 0 and less than 100");
+                        logger.customerLogger.error('error','Invalid Product Quantity!')
                     }
            
             }else{
@@ -319,11 +333,12 @@ const PatchAllProducts = async (req,res) => {
             }
 
         }else{
-            res.status(400).send("UnIntened Key is being sent ");
+            res.status(400).send("Un-intended Key is being sent ");
         }
     }
     else{
         res.status(204).send("No Content");
+        logger.customerLogger.error('error','Content Not Found!')
     }
 };
 
@@ -376,10 +391,12 @@ const DeleteAllProducts = async (req,res) => {
 
         res.status(200).send("Product is Deleted")
         console.log("//Delete"+ '\n' +  JSON.stringify(productFound) +  "is deleted")
+        logger.customlogger.info('DB Error: Product Deleted Sucessfully')
     }
 
     }else{
         res.status(404).send(error);
+        logger.customlogger.info('Invalid Id')
     }
 
 };

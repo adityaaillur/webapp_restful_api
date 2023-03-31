@@ -4,9 +4,9 @@ const {     validateNumber,
     validateFirstAndLastName,
     encryptPassword,
     checkResponseForPost} = require('../validation/validation');
-const {User} = require('../models')
-
-const GetAllUsers = async (req,res) => { 
+    const {User} = require('../models')
+    const logger = require('../logger/logger')
+    const GetAllUsers = async (req,res) => { 
     const iduser = req.params.userId;
     const error = "Invalid id"
 
@@ -24,7 +24,8 @@ const GetAllUsers = async (req,res) => {
         });
 
         if(userFound == null ){
-            res.status(400).send("The userid doesn't exists")
+            res.status(400).send("The user-id doesn't exists")
+            logger.customerLogger.error('error','No such User-ID!')
         }else{
             res.status(200);
             res.send(userFound);
@@ -68,6 +69,7 @@ const PostAllUsers = async (req,res) => {
 
                     if(userFound != null ){
                         res.status(400).send("The account already exists")
+                        logger.customerLogger.error('error','Account already exist!')
                     }else{
                         await User.create({
                             firstName : firstName,
@@ -93,12 +95,14 @@ const PostAllUsers = async (req,res) => {
 
             }else{
                 res.status(400).send("Invalid email or password");
+                logger.customerLogger.error('error','Invalid Credentials!')
             }
         }else{
-            res.status(400).send("Empty firstName or LastName");
+            res.status(400).send("Empty firstName or lastName");
+            logger.customerLogger.error('error','Null fName or lName!')
         }
     }else{
-        res.status(400).send("UnIntened Key or No key is being sent ");
+        res.status(400).send("Un-intended Key or No key is being sent ");
     }
     
 };
@@ -141,6 +145,7 @@ const PutAllUsers = async (req,res) => {
 
                             if(userFound == null){
                                 res.status(400).send("The account doesn't exists")
+                                logger.customerLogger.error('error','No such Account!')
                             }else{
                                 if(userFound.username == email){
                                     userFound.update({
@@ -150,21 +155,25 @@ const PutAllUsers = async (req,res) => {
                                         password:hashedPassword
                                     }, { merge: true }).then(() => {
                                         res.status(200).send("User account updated successfully");
+                                        logger.customerLogger.error('error','Account updated successfully!')
                                         console.log("//PUT"+ '\n' +  JSON.stringify(userFound) +  "is updated")
                                     }).catch((error) => {
                                     console.error("Error updating user: ", error);
                                     }); 
                                 }else{
                                     res.status(400).send("The username is wrong")
+                                    logger.customerLogger.error('error','Invalid Username!')
                                 }
                             }
                 
                     }else{
                         res.status(400).send("Invalid email or password");
+                        logger.customerLogger.error('error','Invalid Credentials!')
                     }
     
                 }else{
-                    res.status(400).send("The firstName or LastName that needs to updated is Empty");
+                    res.status(400).send("The firstName or lastName that needs to updated is Empty");
+                    logger.customerLogger.error('error','Null fname or lName!')
                 }
     
         }else{
@@ -172,7 +181,7 @@ const PutAllUsers = async (req,res) => {
         }
 
     }else{
-        res.status(400).send("UnIntened Key or No key  is being sent ");
+        res.status(400).send("Un-intended Key or No key  is being sent ");
     }
 };
 

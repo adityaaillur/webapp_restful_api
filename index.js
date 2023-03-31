@@ -1,3 +1,4 @@
+
 const express = require('express');
 const portfinder = require('portfinder');
 const bodyParser = require('body-parser');
@@ -8,9 +9,14 @@ const health = require('./health.js');
 
 const db = require('./models')
 
+const logger = require('./logger/logger')
+
 const app = express();
 
+logger.customerLogger.info("Application Started")
+
 health(app);
+
 
 app.use(bodyParser.json());
 
@@ -34,3 +40,6 @@ app.get("/", (req, res) => {
 });
 
 app.post("/user/create",)
+
+
+

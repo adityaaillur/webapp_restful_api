@@ -61,11 +61,23 @@ module.exports = (sequelize, DataTypes) => {
         },
         owner_user_id: {
             type: DataTypes.INTEGER,
-
+            // references: {
+            //   model: User,
+            //   key: 'id',
+            // readOnly: true, 
+            // }
         }   
     },{
         timestamps: false
     })
+
+    // Product.associate = models => {
+    //     Product.belongsTo(models.User, {
+    //         foreignKey: {
+    //             allowNull: false
+    //         }
+    //       }); 
+    // }
 
     return Product;
 }

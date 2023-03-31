@@ -1,3 +1,12 @@
+# packer {
+#   required_plugins {
+#     docker = {
+#       version = ">= 0.0.7"
+#       source = "github.com/hashicorp/docker"
+#     }
+#   }
+# }
+
 variable "ami_users" {
   type    = list(string)
   default = ["393640817367", "032083062214"]
@@ -76,11 +85,11 @@ build {
   ]
 
   provisioner "file" {
-    source      = "../webapp"
+    source      = "../../webapp"
     destination = "/home/ec2-user/webapp"
   }
 
   provisioner "shell" {
-    script = "packer/provision.sh"
+    script = "provision.sh"
   }
 }

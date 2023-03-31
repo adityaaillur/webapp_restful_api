@@ -5,6 +5,8 @@ const router = express.Router();
 
 const productAuth = require("../auth/productAuth");
 
+const apiCallCounter = require("../aws/cloud-watch")
+
 // all routes should start with / as this is give / users in the index.js
 
 // Routes for Adding the product
@@ -22,5 +24,8 @@ router.patch("/product/:productId",apiCallCounter, productAuth, PatchAllProducts
 
 // //DELETE
 router.delete("/product/:productId",apiCallCounter, productAuth, DeleteAllProducts);
+
+
+
 
 module.exports = router;

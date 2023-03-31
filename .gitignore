@@ -99,9 +99,7 @@ dist
 # TernJS port file
 .tern-port
 
-#ingnoring the lock
-package-lock.json
-
 .env
 
-.DS_Store
+#ingnoring the lock
+package-lock.json

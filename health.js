@@ -1,7 +1,7 @@
 const logger = require('./logger/logger')
 
 const health = (app) => app.get('/health', (req, res) => {
-  res.status(200).send("OK Health 200%");
+  res.status(200).send("OK - health API");
   logger.customlogger.info('Access of API health')
 });
 

@@ -49,8 +49,12 @@ variable "aws_profile" {
   default = "demo"
 }
 
+locals {
+  my_ami_name = "my-ami-${formatdate("YYYY-MM-DD-hhmmss", timestamp())}"
+}
+
 source "amazon-ebs" "webapp-ami" {
-  ami_name      = "${var.ami_name}"
+  ami_name      = "local.my_ami_name"
   ami_users     = "${var.ami_users}"
   profile       = "${var.aws_profile}"
   instance_type = "${var.instance_type}"

@@ -26,3 +26,39 @@ jobs:
       run: packer init packer
     - name: Build Packer image
       run: packer build packer/aws-ami.pkr.hcl
+
+  update-launch-template:
+    name: Update launch template
+    runs-on: ubuntu-latest
+    needs: build
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_DEMO }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEMO }}
+      AWS_DEFAULT_REGION: ${{ secrets.REGION }}
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install AWS CLI
+      run: |
+        sudo apt-get update && sudo apt-get install -y awscli
+
+    - name: Get latest AMI ID
+      id: vars
+      run: |
+        latest_ami=$(aws ec2 describe-images --executable-users self --query 'sort_by(Images, &CreationDate)[-1].ImageId' --output text)
+        echo "Latest AMI ID: $latest_ami"
+
+        version_number=$(aws ec2 describe-launch-template-versions --launch-template-name asg_launch_config --query 'sort_by(LaunchTemplateVersions, &VersionNumber)[-1].VersionNumber' --output text)
+        echo "Latest AMI version: $version_number"
+
+        echo "latest_ami=$latest_ami" >> $GITHUB_OUTPUT
+        echo "version_number=$version_number" >> $GITHUB_OUTPUT
+
+    - name: Create new Launch Template version
+      run: |
+        aws ec2 create-launch-template-version --launch-template-name asg_launch_config  --launch-template-data "ImageId=${{ steps.vars.outputs.latest_ami }}" --source-version ${{ steps.vars.outputs.version_number }}
+    
+    - name: Autoscaling group instance refresh
+      run: |
+        aws autoscaling start-instance-refresh --auto-scaling-group-name csye6225-asg-spring2023 --strategy Rolling --desired-configuration '{"LaunchTemplate": {"LaunchTemplateName":"asg_launch_config", "Version":"$Latest"}}'

@@ -54,7 +54,7 @@ locals {
 }
 
 source "amazon-ebs" "webapp-ami" {
-  ami_name      = "local.my_ami_name"
+  ami_name      = local.my_ami_name
   ami_users     = "${var.ami_users}"
   profile       = "${var.aws_profile}"
   instance_type = "${var.instance_type}"

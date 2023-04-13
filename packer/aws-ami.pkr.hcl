@@ -49,7 +49,7 @@ variable "aws_profile" {
   default = "demo"
 }
 
-locals { 
+locals {
   my_ami_name = "my-ami-${formatdate("YYYY-MM-DD-hhmmss", timestamp())}"
 }
 

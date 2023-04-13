@@ -62,6 +62,7 @@ sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
 
 # passwords=$(sudo grep 'temporary password' /var/log/mysqld.log | awk {'print $13'})
 
+
 # cmd to install node verson 16
 sudo yum install -y curl
 curl -sL https://rpm.nodesource.com/setup_16.x | sudo -E bash -
